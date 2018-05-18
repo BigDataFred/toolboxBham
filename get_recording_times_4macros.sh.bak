@@ -1,0 +1,30 @@
+#!/bin/bash
+
+p2f=$1
+ID=$2
+
+echo "the source destination folder is: ${p2f}"
+
+cd ${p2f}
+
+
+list=$(find . -type d -print )
+
+
+echo "The list of subdirectories is ${list}"
+
+for j in ${list}
+
+do
+
+	echo "searching for time-stamp files in folder ${j}"	
+
+	echo "${j}" >> "${p2f}/dum.txt"
+	
+	head "${j}/Events.nev" | grep "Time" >> "${p2f}/dum.txt"
+	
+	echo "" >> "${p2f}/dum.txt"
+
+done
+awk '{print $1 " " $5 " " $7}' dum.txt >> "${p2f}/timeStamp_info_file${ID}.txt"
+rm "${p2f}/dum.txt"
